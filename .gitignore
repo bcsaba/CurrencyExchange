@@ -42,6 +42,7 @@ App_data/
 **/machineKey.config
 **/version.json
 *.development.json
+*.angular
 
 #Node:
 node_modules
