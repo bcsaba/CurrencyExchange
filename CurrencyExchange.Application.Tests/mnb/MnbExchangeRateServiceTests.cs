@@ -74,4 +74,61 @@ public class MnbExchangeRateServiceTests
 
         infoAsync.GetInfoResponse1.GetInfoResult.Should().Be(xmlResponse);
     }
+
+    [Fact]
+    public async Task GivenNonNullResponseObject_WhenRequestCurrentExchangeRates_SoapCallUsedToRetrieveInformation()
+    {
+        _mnbArfolyamServiceSoap.GetCurrentExchangeRatesAsync(Arg.Any<GetCurrentExchangeRatesRequest>())
+            .Returns(new GetCurrentExchangeRatesResponse());
+
+        var currentExchangeRatesAsync =
+            await _mnbExchangeRateService.GetCurrentExchangeRatesAsync(new GetCurrentExchangeRatesRequestBody());
+
+        await _mnbArfolyamServiceSoap.Received(1)
+            .GetCurrentExchangeRatesAsync(Arg.Any<GetCurrentExchangeRatesRequest>());
+    }
+
+    [Fact]
+    public async Task GivenNonNullResponseObject_WhenRequestCurrentExchangeRates_ResultShouldnotBeNull()
+    {
+        _mnbArfolyamServiceSoap.GetCurrentExchangeRatesAsync(Arg.Any<GetCurrentExchangeRatesRequest>())
+            .Returns(new GetCurrentExchangeRatesResponse());
+
+        var currentExchangeRatesAsync =
+            await _mnbExchangeRateService.GetCurrentExchangeRatesAsync(new GetCurrentExchangeRatesRequestBody());
+
+        currentExchangeRatesAsync.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task WhenRequestCurrentExchangeRates_ResultShouldContainCommonCurrencies()
+    {
+        var xmlRespone = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+                         "<MNBCurrentExchangeRates>\n" +
+                         "    <Day date=\"2023-10-17\">\n" +
+                         "        <Rate unit=\"1\" curr=\"CHF\">72,65000</Rate>\n" +
+                         "        <Rate unit=\"1\" curr=\"EUR\">232,23000</Rate>\n" +
+                         "        <Rate unit=\"1\" curr=\"USD\">197,19000</Rate>\n" +
+                         "    </Day>\n" +
+                         "</MNBCurrentExchangeRates>";
+
+        GetCurrentExchangeRatesResponseBody getCurrentExchangeRatesResponseBody = new()
+        {
+            GetCurrentExchangeRatesResult = xmlRespone
+        };
+        _mnbArfolyamServiceSoap.GetCurrentExchangeRatesAsync(Arg.Any<GetCurrentExchangeRatesRequest>())
+            .Returns(new GetCurrentExchangeRatesResponse
+            {
+                GetCurrentExchangeRatesResponse1 = new GetCurrentExchangeRatesResponseBody
+                {
+                    GetCurrentExchangeRatesResult = xmlRespone
+                }
+            });
+
+        var currentExchangeRatesAsync =
+            await _mnbExchangeRateService.GetCurrentExchangeRatesAsync(new GetCurrentExchangeRatesRequestBody());
+
+        currentExchangeRatesAsync.GetCurrentExchangeRatesResponse1.GetCurrentExchangeRatesResult.Should().Be(xmlRespone);
+    }
+
 }
