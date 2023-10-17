@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyExchange.Applicatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyExchange.Application.Integration.Tests", "CurrencyExchange.Application.Integration.Tests\CurrencyExchange.Application.Integration.Tests.csproj", "{58E97709-05C0-4AE3-B56A-8AC37080BDEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyExchange.Tests", "CurrencyExchange.Tests\CurrencyExchange.Tests.csproj", "{41B499CF-9933-4D09-A5EF-DF8EA45A3A1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{58E97709-05C0-4AE3-B56A-8AC37080BDEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58E97709-05C0-4AE3-B56A-8AC37080BDEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58E97709-05C0-4AE3-B56A-8AC37080BDEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41B499CF-9933-4D09-A5EF-DF8EA45A3A1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41B499CF-9933-4D09-A5EF-DF8EA45A3A1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41B499CF-9933-4D09-A5EF-DF8EA45A3A1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41B499CF-9933-4D09-A5EF-DF8EA45A3A1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
