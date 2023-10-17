@@ -22,4 +22,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\CurrencyExchange.Application\CurrencyExchange.Application.csproj" />
+    </ItemGroup>
+
 </Project>
