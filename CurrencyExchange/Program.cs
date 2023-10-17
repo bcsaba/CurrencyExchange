@@ -1,8 +1,12 @@
+using www.mnb.hu.webservices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IMnbExchangeRateService, MnbExchangeRateService>();
+builder.Services.AddScoped<MNBArfolyamServiceSoap, MNBArfolyamServiceSoapClient>();
 
 var app = builder.Build();
 
