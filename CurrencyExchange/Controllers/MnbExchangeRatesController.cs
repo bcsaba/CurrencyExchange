@@ -46,7 +46,8 @@ public class MnbExchangeRatesController : ControllerBase
         var serializer = new XmlSerializer(typeof(MNBExchangeRates));
         MNBExchangeRates result;
 
-        using (TextReader reader = new StringReader(getExchangeRatesResponse.GetExchangeRatesResponse1.GetExchangeRatesResult))
+        using (TextReader reader =
+               new StringReader(getExchangeRatesResponse.GetExchangeRatesResponse1.GetExchangeRatesResult))
         {
             result = (MNBExchangeRates)serializer.Deserialize(reader);
         }
