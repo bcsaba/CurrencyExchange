@@ -5,7 +5,7 @@ namespace CurrencyExchange.Application.Integration.Tests.mnb;
 
 public class MnbExchangeRateServiceTests
 {
-    private IMnbExchangeRateService _mnbExchangeRateService;
+    private readonly IMnbExchangeRateService _mnbExchangeRateService;
 
     public MnbExchangeRateServiceTests()
     {

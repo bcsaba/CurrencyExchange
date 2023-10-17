@@ -25,6 +25,12 @@
     <ProjectReference Include="..\CurrencyExchange.Application\CurrencyExchange.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="CurrencyExchange.Application">
+      <HintPath>bin\Debug\net7.0\CurrencyExchange.Application.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
