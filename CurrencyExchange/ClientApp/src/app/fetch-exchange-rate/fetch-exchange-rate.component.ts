@@ -28,12 +28,13 @@ interface ExchangeRates {
 }
 
 interface Day {
-  exchangeDate: string;
+  exchangeDate: Date;
   rates: Rate[];
 }
 
 interface Rate {
   currency: string;
   exchangeUnit: number;
+  valueStr: string;
   value: number;
 }

@@ -1,20 +1,33 @@
 <div *ngIf="exchangeRates != undefined">
-  <h1 >Exchange rates for {{ exchangeRates.day.exchangeDate }}</h1>
+  <h3 class="d-flex justify-content-center p-3">Exchange rates for {{ exchangeRates.day.exchangeDate | date:"yyyy.MM.dd." }}</h3>
 
-  <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="exchangeRates?.day?.rates?.length">
-    <thead>
-    <tr>
-      <th>Pénznem</th>
-      <th>Egység</th>
-      <th>Érték forintban</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let exchangeRate of exchangeRates.day.rates">
-      <td>{{ exchangeRate.currency }}</td>
-      <td>{{ exchangeRate.exchangeUnit }}</td>
-      <td>{{ exchangeRate.value }}</td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="container">
+    <div class="row fw-bolder border-bottom p-2">
+      <div class="col">
+        Currency
+      </div>
+      <div class="col">
+        Unit
+      </div>
+      <div class="col">
+        Value in HUF
+      </div>
+      <div class="col">
+        &nbsp;
+      </div>
+    </div>
+    <div class="row p-1 striped-row" *ngFor="let exchangeRate of exchangeRates?.day?.rates">
+      <div class="col">
+        {{ exchangeRate.currency }}
+      </div>
+      <div class="col">
+        {{ exchangeRate.exchangeUnit }}
+      </div>
+      <div class="col">
+        {{ exchangeRate.value }}
+      </div>
+      <div class="col d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-primary">Save</button>
+      </div>
+  </div>
 </div>
