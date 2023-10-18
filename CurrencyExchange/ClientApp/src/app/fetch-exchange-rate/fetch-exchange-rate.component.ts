@@ -1,6 +1,6 @@
-import {Component, Inject} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Component} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ExchangeRates, ExchangeRatesService, Rate, RateWithComment} from "../exchange-rates.service";
 
 @Component({
   selector: 'app-fetch-exchange-rate',
@@ -18,19 +18,19 @@ export class FetchExchangeRateComponent {
     comment: ''}
 
   constructor(
-    http: HttpClient,
-    @Inject('BASE_URL') baseUrl: string,
-    private modalService: NgbModal )
-  {
-    http.get<ExchangeRates>(baseUrl + 'mnbcurrentexchangerates').subscribe(
-      {complete: () => console.log('complete'),
-        error: err => console.error(err),
-        next: value => {
-          this.exchangeRates = value;
-          console.log(this.exchangeRates);
-        }
-      },
-    );
+    private modalService: NgbModal,
+    private exchangeRatesService: ExchangeRatesService) {
+    this.exchangeRatesService.getCurrentMnbRates()
+      .subscribe(
+        {
+          complete: () => console.log('Get MNB rates completed'),
+          error: err => console.error(err),
+          next: value => {
+            this.exchangeRates = value;
+            console.log(value);
+          }
+        },
+      );
   }
 
   open(content: any, selectedRate: Rate) {
@@ -48,25 +48,4 @@ export class FetchExchangeRateComponent {
     },
     );
   }
-}
-
-interface ExchangeRates {
-  day: Day;
-}
-
-interface Day {
-  exchangeDate: Date;
-  rates: Rate[];
-}
-
-interface Rate {
-  currency: string;
-  exchangeUnit: number;
-  valueStr: string;
-  value: number;
-}
-
-interface RateWithComment extends Rate {
-  comment: string;
-  exchangeDate: Date;
 }
