@@ -22,7 +22,7 @@ import {ToastService} from "../toast.service";
 
       <ng-template #text class="container">
         <div class="row">
-        <div class="col">{{ toast.textOrTpl }}</div>
+        <div class="col-10">{{ toast.textOrTpl }}</div>
         <div class="col d-flex justify-content-end">
           <button type="button" aria-label="Close" class="btn-close" (click)="toastService.remove(toast)"></button>
         </div>

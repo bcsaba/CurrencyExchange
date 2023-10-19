@@ -16,6 +16,13 @@ export class ExchangeRatesService {
       .pipe(catchError(this.handleError<ExchangeRates>('getCurrentMnbRates', undefined)));
   }
 
+  saveRateWithComment(rateWithComment: RateWithComment) : Observable<RateWithComment> {
+    return this.http.post<RateWithComment>(
+      this.baseUrl + 'storedexchangerates', rateWithComment,
+      {headers: {'Content-Type': 'application/json'}});
+    // .pipe(catchError(this.handleError<RateWithComment>('saveRateWithComment', undefined)));
+  }
+
   handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);
