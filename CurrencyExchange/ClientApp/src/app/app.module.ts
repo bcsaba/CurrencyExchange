@@ -11,6 +11,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { FetchExchangeRateComponent } from "./fetch-exchange-rate/fetch-exchange-rate.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {ToastsContainer} from "./toasts-container/toasts-container.component";
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'fetch-exchange-rate', component: FetchExchangeRateComponent },
-    ])
+    ]),
+    ToastsContainer
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ExchangeRates, ExchangeRatesService, Rate, RateWithComment} from "../exchange-rates.service";
+import {ToastService} from "../toast.service";
 
 @Component({
   selector: 'app-fetch-exchange-rate',
@@ -19,13 +20,16 @@ export class FetchExchangeRateComponent {
 
   constructor(
     private modalService: NgbModal,
-    private exchangeRatesService: ExchangeRatesService) {
+    private exchangeRatesService: ExchangeRatesService,
+    public toastService: ToastService
+  ) {
     this.exchangeRatesService.getCurrentMnbRates()
       .subscribe(
         {
           complete: () => console.log('Get MNB rates completed'),
           error: err => console.error(err),
           next: value => {
+            this.toastService.show('MNB rates loaded', {classname: 'bg-success text-light', delay: 5000});
             this.exchangeRates = value;
             console.log(value);
           }
