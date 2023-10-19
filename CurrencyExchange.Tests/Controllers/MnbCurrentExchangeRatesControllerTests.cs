@@ -1,3 +1,4 @@
+using CurrencyExchange.Application.mnb;
 using CurrencyExchange.Controllers;
 using FluentAssertions;
 using NSubstitute;

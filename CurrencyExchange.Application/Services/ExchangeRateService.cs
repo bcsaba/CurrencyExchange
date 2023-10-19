@@ -20,7 +20,7 @@ public class ExchangeRateService : IExchangeRateService
     
     public async Task<Currency> GetCurrency(int id)
     {
-        return await _dbContext.Currencies.SingleOrDefault(id);
+        return await _dbContext.Currencies.SingleOrDefaultAsync(c => c.Id == id);
     }
     
     public async Task<Currency> AddCurrency(Currency currency)
@@ -37,7 +37,7 @@ public class ExchangeRateService : IExchangeRateService
     
     public async Task<SavedRate> GetSavedRate(int id)
     {
-        return await _dbContext.SavedRates.SingleOrDefault(id);
+        return await _dbContext.SavedRates.SingleOrDefaultAsync(r => r.Id == id);
     }
 
     public async Task<IEnumerable<SavedRate>> GetSavedRatesByCurrencyId(int id)
@@ -51,7 +51,7 @@ public class ExchangeRateService : IExchangeRateService
     {
         return await _dbContext.SavedRates
             .Where(x => x.Currency.CurrencyName == name)
-            .ToListAsync());
+            .ToListAsync();
     }
 
     public async Task<SavedRate> AddSavedRate(SavedRate savedRate)

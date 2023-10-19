@@ -42,7 +42,7 @@ namespace CurrencyExchange.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("CurrencyExchange.Persistence.Models.SavedRate", b =>
@@ -74,7 +74,7 @@ namespace CurrencyExchange.Persistence.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("SavedRates");
+                    b.ToTable("SavedRates", (string)null);
                 });
 
             modelBuilder.Entity("CurrencyExchange.Persistence.Models.SavedRate", b =>
