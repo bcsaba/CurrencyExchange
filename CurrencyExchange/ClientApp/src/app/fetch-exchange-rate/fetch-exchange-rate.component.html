@@ -1,0 +1,67 @@
+<div *ngIf="exchangeRates != undefined">
+  <h3 class="d-flex justify-content-center p-3">Exchange rates for {{ exchangeRates.day.exchangeDate | date:"yyyy.MM.dd." }}</h3>
+
+  <div class="container">
+    <div class="row fw-bolder border-bottom p-2">
+      <div class="col">
+        Currency
+      </div>
+      <div class="col">
+        Unit
+      </div>
+      <div class="col d-flex justify-content-end">
+        Value in HUF
+      </div>
+      <div class="col">
+        &nbsp;
+      </div>
+    </div>
+    <div class="row p-1 striped-row" *ngFor="let exchangeRate of exchangeRates?.day?.rates">
+      <div class="col">
+        {{ exchangeRate.currency }}
+      </div>
+      <div class="col">
+        {{ exchangeRate.exchangeUnit }}
+      </div>
+      <div class="col d-flex justify-content-end">
+        {{ exchangeRate.value | number:'1.2-2' }}
+      </div>
+      <div class="col d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-primary" (click)="open(content, exchangeRate)">Save ...</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+<!-- Modal -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">
+      Save {{activeRate.currency}} with rate {{ activeRate.value | number}} for {{ exchangeRates!.day.exchangeDate | date:"yyyy.MM.dd." }}
+    </h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form name="saveCommentForm">
+      <div class="mb-3">
+        <label for="saveComment">Comment</label>
+        <div class="input-group">
+          <input
+            id="saveComment"
+            type="text"
+            class="form-control"
+            name="comment"
+            maxlength="100"
+            [(ngModel)]="activeRate.comment"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
