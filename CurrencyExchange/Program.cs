@@ -1,3 +1,5 @@
+using CurrencyExchange.Persistence;
+using Microsoft.EntityFrameworkCore;
 using www.mnb.hu.webservices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IMnbExchangeRateService, MnbExchangeRateService>();
 builder.Services.AddScoped<MNBArfolyamServiceSoap, MNBArfolyamServiceSoapClient>();
+builder.Services.AddDbContext<ExchangeRateDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("ExchangeRateDbConnection"));
+});
 
 var app = builder.Build();
 
