@@ -23,6 +23,12 @@ export class ExchangeRatesService {
     // .pipe(catchError(this.handleError<RateWithComment>('saveRateWithComment', undefined)));
   }
 
+  convertHufToEur(conversionModel: CurrencyConversionModel) : Observable<CurrencyConversionModel> {
+    return this.http.post<CurrencyConversionModel>(
+      this.baseUrl + 'currencyconversion', conversionModel,
+      {headers: {'Content-Type': 'application/json'}});
+  }
+
   handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);
@@ -53,3 +59,10 @@ export interface RateWithComment extends Rate {
   exchangeDate: Date;
 }
 
+
+export interface CurrencyConversionModel {
+  fromCurrency: string;
+  fromAmount: number;
+  toCurrency: string;
+  toAmount?: number;
+}

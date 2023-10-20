@@ -9,7 +9,7 @@ namespace CurrencyExchange.Controllers;
 [Route("[controller]")]
 public class StoredExchangeRate : ControllerBase
 {
-    private IMediator _mediator;
+    private readonly IMediator _mediator;
 
     public StoredExchangeRate(IMediator mediator)
     {
