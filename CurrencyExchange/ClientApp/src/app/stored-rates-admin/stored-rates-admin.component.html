@@ -2,46 +2,66 @@
 
 <div class="container">
   <div class="row fw-bolder border-bottom p-2">
-    <div class="col">
+    <div class="col-1">
       Currency
     </div>
-    <div class="col">
+    <div class="col-1">
       Unit
     </div>
-    <div class="col">
+    <div class="col-2">
       Date
     </div>
-    <div class="col d-flex justify-content-end">
+    <div class="col-2 d-flex justify-content-end">
       Value in HUF
     </div>
-    <div class="col">
+    <div class="col-4">
       Comment
     </div>
-    <div class="col">
+    <div class="col-2">
       <!-- actions -->
     </div>
-
   </div>
 
 
   <div class="row p-1 striped-row" *ngFor="let exchangeRate of storedRates">
-    <div class="col">
+    <div class="col-1">
       {{ exchangeRate.currency }}
     </div>
-    <div class="col">
+    <div class="col-1">
       {{ exchangeRate.exchangeUnit }}
     </div>
-    <div class="col">
+    <div class="col-2">
       {{ exchangeRate.exchangeDate | date:'yyyy-MM-dd' }}
     </div>
-    <div class="col d-flex justify-content-end">
+    <div class="col-2 d-flex justify-content-end">
       {{ exchangeRate.value | number:'1.2-2' }}
     </div>
-    <div class="col">
-      {{ exchangeRate.comment }}
+    <div class="col-4">
+      <span *ngIf="!exchangeRate.editMode">{{ exchangeRate.initialComment }}</span>
+      <div *ngIf="exchangeRate.editMode">
+        <textarea placeholder="Add your comment" [(ngModel)]="exchangeRate.comment"></textarea>
+      </div>
     </div>
-    <div class="col d-flex justify-content-end">
-      <button type="button" class="btn btn-outline-primary ce-btn-height-1">Edit ...</button>
+    <div class="col-2 d-flex justify-content-end">
+      <button
+        type="button"
+        class="btn btn btn-secondary ce-btn-height-1 p"
+        *ngIf="!exchangeRate.editMode"
+        (click)="exchangeRate.editMode = true">🖉</button>
+      <div *ngIf="exchangeRate.editMode">
+        <button
+          type="button"
+          class="btn btn-danger ce-btn-height-1 m-1"
+          (click)="exchangeRate.editMode = false">⨯</button>
+        <button
+          type="button"
+          class="btn btn-primary ce-btn-height-1 m-0"
+          (click)="updateStoredRate(exchangeRate)">🖫</button>
+          <!-- Use this icon instead??? 💾 -->
+      </div>
     </div>
   </div>
 </div>
+
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
