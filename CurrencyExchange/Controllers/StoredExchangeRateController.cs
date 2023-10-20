@@ -1,5 +1,6 @@
 using CurrencyExchange.Application.Commands;
 using CurrencyExchange.Application.Models;
+using CurrencyExchange.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,13 +8,20 @@ namespace CurrencyExchange.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class StoredExchangeRate : ControllerBase
+public class StoredExchangeRateController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public StoredExchangeRate(IMediator mediator)
+    public StoredExchangeRateController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<JsonResult> Get()
+    {
+        var storedRates = await _mediator.Send(new GetStoredRatesQuery());
+        return new JsonResult(storedRates);
     }
 
     [HttpPost]
