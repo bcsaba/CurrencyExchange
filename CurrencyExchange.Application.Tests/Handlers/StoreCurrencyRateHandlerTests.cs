@@ -15,7 +15,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
 {
     private readonly IMediator _mediator;
     private TestExchangeRateDbContext _dbContext;
-    private StoreCurrencyRateHandler _sut;
+    private StoreCurrencyRateCommandHandler _sut;
     private const string TestCurrencyName = "EUR";
     private readonly DateOnly _testExchangeRateDate = new(2021, 1, 1);
 
@@ -26,7 +26,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
         _dbContext = GetCleanDbForTest();
         _dbContext.Database.BeginTransaction();
 
-        _sut = new StoreCurrencyRateHandler(_dbContext, _mediator);
+        _sut = new StoreCurrencyRateCommandHandler(_dbContext, _mediator);
     }
 
     [Fact]

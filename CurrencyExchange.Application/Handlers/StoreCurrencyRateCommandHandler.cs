@@ -7,12 +7,12 @@ using MediatR;
 
 namespace CurrencyExchange.Application.Handlers;
 
-public class StoreCurrencyRateHandler : IRequestHandler<StoreCurrencyRateCommand, SaveRateViewModel>
+public class StoreCurrencyRateCommandHandler : IRequestHandler<StoreCurrencyRateCommand, SaveRateViewModel>
 {
     private readonly ExchangeRateDbContext _dbContext;
     private readonly IMediator _mediator;
 
-    public StoreCurrencyRateHandler(ExchangeRateDbContext dbContext, IMediator mediator)
+    public StoreCurrencyRateCommandHandler(ExchangeRateDbContext dbContext, IMediator mediator)
     {
         _dbContext = dbContext;
         _mediator = mediator;

@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyExchange.Application.Handlers;
 
-public class GetLocalCurrencyByIdHandler : IRequestHandler<GetLocalCurrencyByIdRequest, Currency>
+public class GetLocalCurrencyByIdRequestHandler : IRequestHandler<GetLocalCurrencyByIdRequest, Currency>
 {
     private readonly ExchangeRateDbContext _dbContext;
 
-    public GetLocalCurrencyByIdHandler(ExchangeRateDbContext dbContext)
+    public GetLocalCurrencyByIdRequestHandler(ExchangeRateDbContext dbContext)
     {
         _dbContext = dbContext;
     }
