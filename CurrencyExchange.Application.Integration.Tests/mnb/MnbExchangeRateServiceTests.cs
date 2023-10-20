@@ -1,3 +1,4 @@
+using CurrencyExchange.Application.mnb;
 using FluentAssertions;
 using www.mnb.hu.webservices;
 

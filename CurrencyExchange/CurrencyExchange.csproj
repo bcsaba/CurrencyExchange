@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,12 +24,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CurrencyExchange.Application\CurrencyExchange.Application.csproj" />
+    <ProjectReference Include="..\CurrencyExchange.Persistence\CurrencyExchange.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="CurrencyExchange.Application">
       <HintPath>bin\Debug\net7.0\CurrencyExchange.Application.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

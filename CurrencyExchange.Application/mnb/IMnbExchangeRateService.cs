@@ -1,4 +1,6 @@
-namespace www.mnb.hu.webservices;
+using www.mnb.hu.webservices;
+
+namespace CurrencyExchange.Application.mnb;
 
 public interface IMnbExchangeRateService
 {

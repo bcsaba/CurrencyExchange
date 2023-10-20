@@ -7,7 +7,8 @@ const PROXY_CONFIG = [
   {
     context: [
       "/weatherforecast",
-      "/mnbcurrentexchangerates"
+      "/mnbcurrentexchangerates",
+      "/storedexchangerate",
    ],
     proxyTimeout: 10000,
     target: target,

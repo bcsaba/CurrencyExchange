@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using CurrencyExchange.Application.mnb;
 using Microsoft.AspNetCore.Mvc;
 using www.mnb.hu.webservices;
 using www.mnb.hu.webservices.Models;

@@ -18,7 +18,7 @@ export class ExchangeRatesService {
 
   saveRateWithComment(rateWithComment: RateWithComment) : Observable<RateWithComment> {
     return this.http.post<RateWithComment>(
-      this.baseUrl + 'storedexchangerates', rateWithComment,
+      this.baseUrl + 'storedexchangerate', rateWithComment,
       {headers: {'Content-Type': 'application/json'}});
     // .pipe(catchError(this.handleError<RateWithComment>('saveRateWithComment', undefined)));
   }
