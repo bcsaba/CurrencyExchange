@@ -19,13 +19,13 @@ public class CurrencyController : ControllerBase
     [Route("[controller]")]
     public async Task<JsonResult> Get()
     {
-        return new JsonResult(await _mediator.Send(new GetLocalCurrenciesRequest()));
+        return new JsonResult(await _mediator.Send(new GetLocalCurrenciesQuery()));
     }
 
     [HttpGet]
     [Route("[controller]/{id:int}")]
     public async Task<JsonResult> Get(int id)
     {
-        return new JsonResult(await _mediator.Send(new GetLocalCurrencyByIdRequest(id)));
+        return new JsonResult(await _mediator.Send(new GetLocalCurrencyByIdQuery(id)));
     }
 }
