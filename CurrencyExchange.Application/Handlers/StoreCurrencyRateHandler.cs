@@ -4,6 +4,7 @@ using CurrencyExchange.Application.Queries;
 using CurrencyExchange.Persistence;
 using CurrencyExchange.Persistence.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyExchange.Application.Handlers;
 
@@ -23,10 +24,10 @@ public class StoreCurrencyRateHandler : IRequestHandler<StoreCurrencyRateCommand
         var exchangeRate = request.exchangeRate;
 
         var currency = await AddOrGetCurrency(cancellationToken, exchangeRate);
-
         var savedRate = await AddOrUpdateSavedRate(cancellationToken, currency, exchangeRate);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
+
         return new SaveRateViewModel(
             currency.Id,
             currency.CurrencyName,
@@ -69,7 +70,7 @@ public class StoreCurrencyRateHandler : IRequestHandler<StoreCurrencyRateCommand
 
     private async Task<Currency> AddOrGetCurrency(CancellationToken cancellationToken, ExchangeRateWithComment exchangeRate)
     {
-        var currency = _mediator.Send(new GetLocalCurrencyByNameRequest(exchangeRate.Currency), cancellationToken).Result;
+        var currency = await _mediator.Send(new GetLocalCurrencyByNameRequest(exchangeRate.Currency), cancellationToken);
 
         if (currency == null)
         {
