@@ -13,6 +13,7 @@ import { FetchExchangeRateComponent } from "./fetch-exchange-rate/fetch-exchange
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {ToastsContainer} from "./toasts-container/toasts-container.component";
 import { HufConverterComponent } from './huf-converter/huf-converter.component';
+import { StoredRatesAdminComponent } from './stored-rates-admin/stored-rates-admin.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HufConverterComponent } from './huf-converter/huf-converter.component';
     CounterComponent,
     FetchDataComponent,
     FetchExchangeRateComponent,
-    HufConverterComponent
+    HufConverterComponent,
+    StoredRatesAdminComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -34,6 +36,7 @@ import { HufConverterComponent } from './huf-converter/huf-converter.component';
       { path: 'counter', component: CounterComponent },
       { path: 'huf-converter', component: HufConverterComponent },
       { path: 'fetch-exchange-rate', component: FetchExchangeRateComponent },
+      { path: 'stored-rates-admin', component: StoredRatesAdminComponent}
     ]),
     ToastsContainer
   ],
