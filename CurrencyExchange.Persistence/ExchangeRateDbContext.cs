@@ -26,3 +26,22 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ExchangeRa
         return new ExchangeRateDbContext(builder.Options);
     }
 }
+
+public class TestExchangeRateDbContext : ExchangeRateDbContext
+{
+    public TestExchangeRateDbContext(DbContextOptions<ExchangeRateDbContext> options)
+        : base(options)
+    { }
+}
+
+public class TestDesignTimeDbContextFactory : IDesignTimeDbContextFactory<TestExchangeRateDbContext>
+{
+    public TestExchangeRateDbContext CreateDbContext(string[] args)
+    {
+        IConfigurationRoot configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile(@Directory.GetCurrentDirectory() + "/../CurrencyExchange/appsettings.json").Build();
+        var builder = new DbContextOptionsBuilder<ExchangeRateDbContext>();
+        var connectionString = configuration.GetConnectionString("TestExchangeRateDbConnection");
+        builder.UseNpgsql(connectionString);
+        return new TestExchangeRateDbContext(builder.Options);
+    }
+}

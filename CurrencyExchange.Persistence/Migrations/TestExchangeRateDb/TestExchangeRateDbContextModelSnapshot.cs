@@ -8,10 +8,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CurrencyExchange.Persistence.Migrations
+namespace CurrencyExchange.Persistence.Migrations.TestExchangeRateDb
 {
-    [DbContext(typeof(ExchangeRateDbContext))]
-    partial class ExchangeRateDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(TestExchangeRateDbContext))]
+    partial class TestExchangeRateDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
