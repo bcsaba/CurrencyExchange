@@ -1,3 +1,47 @@
-<p>stored-rates-admin works!</p>
+<h3 class="d-flex justify-content-center p-3">Stored rates administration</h3>
 
-{{storedRates}}
+<div class="container">
+  <div class="row fw-bolder border-bottom p-2">
+    <div class="col">
+      Currency
+    </div>
+    <div class="col">
+      Unit
+    </div>
+    <div class="col">
+      Date
+    </div>
+    <div class="col d-flex justify-content-end">
+      Value in HUF
+    </div>
+    <div class="col">
+      Comment
+    </div>
+    <div class="col">
+      <!-- actions -->
+    </div>
+
+  </div>
+
+
+  <div class="row p-1 striped-row" *ngFor="let exchangeRate of storedRates">
+    <div class="col">
+      {{ exchangeRate.currency }}
+    </div>
+    <div class="col">
+      {{ exchangeRate.exchangeUnit }}
+    </div>
+    <div class="col">
+      {{ exchangeRate.exchangeDate | date:'yyyy-MM-dd' }}
+    </div>
+    <div class="col d-flex justify-content-end">
+      {{ exchangeRate.value | number:'1.2-2' }}
+    </div>
+    <div class="col">
+      {{ exchangeRate.comment }}
+    </div>
+    <div class="col d-flex justify-content-end">
+      <button type="button" class="btn btn-outline-primary ce-btn-height-1">Edit ...</button>
+    </div>
+  </div>
+</div>
