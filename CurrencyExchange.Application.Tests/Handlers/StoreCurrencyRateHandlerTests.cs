@@ -40,7 +40,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
             Comment = "Test"
         }), CancellationToken.None);
 
-        await _mediator.Received(1).Send(Arg.Any<GetLocalCurrencyByNameRequest>());
+        await _mediator.Received(1).Send(Arg.Any<GetLocalCurrencyByNameQuery>());
     }
 
     [Fact]
@@ -137,9 +137,9 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
             await _dbContext.SavedRates.AddAsync(savedRate);
         }
         await _dbContext.SaveChangesAsync();
-        _mediator.Send(Arg.Any<GetLocalCurrencyByNameRequest>())
+        _mediator.Send(Arg.Any<GetLocalCurrencyByNameQuery>())
             .Returns(currency);
-        _mediator.Send(Arg.Any<GetSavedRateByCurrencyAndDateRequest>())
+        _mediator.Send(Arg.Any<GetSavedRateByCurrencyAndDateQuery>())
             .Returns(savedRate);
     }
 

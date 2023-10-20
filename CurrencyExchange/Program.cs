@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ExchangeRateDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("ExchangeRateDbConnection"));
 });
 builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssembly(typeof(GetLocalCurrenciesRequest).Assembly));
+    cfg.RegisterServicesFromAssembly(typeof(GetLocalCurrenciesQuery).Assembly));
 
 var app = builder.Build();
 

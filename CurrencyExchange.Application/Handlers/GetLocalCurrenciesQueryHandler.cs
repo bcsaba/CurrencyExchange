@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyExchange.Application.Handlers;
 
-public class GetLocalCurrenciesRequestHandler : IRequestHandler<Queries.GetLocalCurrenciesRequest, List<Currency>>
+public class GetLocalCurrenciesQueryHandler : IRequestHandler<Queries.GetLocalCurrenciesQuery, List<Currency>>
 {
     private readonly ExchangeRateDbContext _dbContext;
 
-    public GetLocalCurrenciesRequestHandler(ExchangeRateDbContext dbContext)
+    public GetLocalCurrenciesQueryHandler(ExchangeRateDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<List<Currency>> Handle(Queries.GetLocalCurrenciesRequest request, CancellationToken cancellationToken)
+    public async Task<List<Currency>> Handle(Queries.GetLocalCurrenciesQuery query, CancellationToken cancellationToken)
     {
         return await _dbContext.Currencies.ToListAsync(cancellationToken);
     }

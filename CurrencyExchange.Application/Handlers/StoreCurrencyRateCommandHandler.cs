@@ -41,7 +41,7 @@ public class StoreCurrencyRateCommandHandler : IRequestHandler<StoreCurrencyRate
         ExchangeRateWithComment exchangeRate)
     {
         var savedRate = await _mediator.Send(
-            new GetSavedRateByCurrencyAndDateRequest(currency.CurrencyName, exchangeRate.ExchangeDate),
+            new GetSavedRateByCurrencyAndDateQuery(currency.CurrencyName, exchangeRate.ExchangeDate),
             cancellationToken);
 
         if (savedRate == null)
@@ -69,7 +69,7 @@ public class StoreCurrencyRateCommandHandler : IRequestHandler<StoreCurrencyRate
 
     private async Task<Currency> AddOrGetCurrency(CancellationToken cancellationToken, ExchangeRateWithComment exchangeRate)
     {
-        var currency = await _mediator.Send(new GetLocalCurrencyByNameRequest(exchangeRate.Currency), cancellationToken);
+        var currency = await _mediator.Send(new GetLocalCurrencyByNameQuery(exchangeRate.Currency), cancellationToken);
 
         if (currency == null)
         {
