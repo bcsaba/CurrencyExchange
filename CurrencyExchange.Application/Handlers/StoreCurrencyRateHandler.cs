@@ -4,24 +4,73 @@ using CurrencyExchange.Application.Queries;
 using CurrencyExchange.Persistence;
 using CurrencyExchange.Persistence.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyExchange.Application.Handlers;
 
 public class StoreCurrencyRateHandler : IRequestHandler<StoreCurrencyRateCommand, SaveRateViewModel>
 {
     private readonly ExchangeRateDbContext _dbContext;
+    private readonly IMediator _mediator;
 
-    public StoreCurrencyRateHandler(ExchangeRateDbContext dbContext)
+    public StoreCurrencyRateHandler(ExchangeRateDbContext dbContext, IMediator mediator)
     {
         _dbContext = dbContext;
+        _mediator = mediator;
     }
 
     public async Task<SaveRateViewModel> Handle(StoreCurrencyRateCommand request, CancellationToken cancellationToken)
     {
         var exchangeRate = request.exchangeRate;
-        var currency = await _dbContext.Currencies.FirstOrDefaultAsync(
-            c => c.CurrencyName == exchangeRate.Currency, cancellationToken);
+
+        var currency = await AddOrGetCurrency(cancellationToken, exchangeRate);
+
+        var savedRate = await AddOrUpdateSavedRate(cancellationToken, currency, exchangeRate);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return new SaveRateViewModel(
+            currency.Id,
+            currency.CurrencyName,
+            savedRate.Rate,
+            savedRate.Comment,
+            currency.Unit,
+            savedRate.Created,
+            savedRate.RateDay);
+    }
+
+    private async Task<SavedRate> AddOrUpdateSavedRate(CancellationToken cancellationToken, Currency currency,
+        ExchangeRateWithComment exchangeRate)
+    {
+        var savedRate = await _mediator.Send(
+            new GetSavedRateByCurrencyAndDateRequest(currency.CurrencyName, exchangeRate.ExchangeDate),
+            cancellationToken);
+
+        if (savedRate == null)
+        {
+            savedRate = new SavedRate
+            {
+                Currency = currency,
+                Rate = exchangeRate.Value,
+                Created = DateTime.UtcNow,
+                Comment = exchangeRate.Comment,
+                RateDay = exchangeRate.ExchangeDate
+            };
+            await _dbContext.SavedRates.AddAsync(savedRate, cancellationToken);
+        }
+        else
+        {
+            savedRate.Rate = exchangeRate.Value;
+            savedRate.Comment = exchangeRate.Comment;
+            savedRate.RateDay = exchangeRate.ExchangeDate;
+            savedRate.LastUpdated = DateTime.UtcNow;
+        }
+
+        return savedRate;
+    }
+
+    private async Task<Currency> AddOrGetCurrency(CancellationToken cancellationToken, ExchangeRateWithComment exchangeRate)
+    {
+        var currency = _mediator.Send(new GetLocalCurrencyByNameRequest(exchangeRate.Currency), cancellationToken).Result;
+
         if (currency == null)
         {
             currency = new Currency
@@ -33,23 +82,6 @@ public class StoreCurrencyRateHandler : IRequestHandler<StoreCurrencyRateCommand
             await _dbContext.Currencies.AddAsync(currency, cancellationToken);
         }
 
-        var savedRate = new SavedRate
-        {
-            Currency = currency,
-            Rate = exchangeRate.Value,
-            Created = DateTime.UtcNow,
-            Comment = exchangeRate.Comment,
-            RateDay = exchangeRate.ExchangeDate
-        };
-        await _dbContext.SavedRates.AddAsync(savedRate, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        return new SaveRateViewModel(
-            currency.Id,
-            currency.CurrencyName,
-            savedRate.Rate,
-            savedRate.Comment,
-            currency.Unit,
-            savedRate.Created,
-            savedRate.RateDay);
+        return currency;
     }
 }

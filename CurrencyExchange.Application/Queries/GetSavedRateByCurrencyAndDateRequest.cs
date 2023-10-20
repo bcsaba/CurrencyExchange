@@ -3,4 +3,4 @@ using MediatR;
 
 namespace CurrencyExchange.Application.Queries;
 
-public record GetSavedRateByCurrencyAndDateRequest(string currencyName, DateTime date) : IRequest<SavedRate?>;
+public record GetSavedRateByCurrencyAndDateRequest(string currencyName, DateOnly date) : IRequest<SavedRate?>;
