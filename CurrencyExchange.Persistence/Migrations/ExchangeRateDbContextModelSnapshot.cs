@@ -42,7 +42,7 @@ namespace CurrencyExchange.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies", (string)null);
+                    b.ToTable("Currencies");
                 });
 
             modelBuilder.Entity("CurrencyExchange.Persistence.Models.SavedRate", b =>
@@ -54,7 +54,6 @@ namespace CurrencyExchange.Persistence.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -64,7 +63,7 @@ namespace CurrencyExchange.Persistence.Migrations
                     b.Property<int>("CurrencyId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("LastUpdated")
+                    b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<float>("Rate")
@@ -74,7 +73,7 @@ namespace CurrencyExchange.Persistence.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("SavedRates", (string)null);
+                    b.ToTable("SavedRates");
                 });
 
             modelBuilder.Entity("CurrencyExchange.Persistence.Models.SavedRate", b =>

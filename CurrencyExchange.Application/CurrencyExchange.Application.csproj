@@ -18,8 +18,4 @@
     <ProjectReference Include="..\CurrencyExchange.Persistence\CurrencyExchange.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
-
 </Project>

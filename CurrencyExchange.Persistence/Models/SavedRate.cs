@@ -13,9 +13,9 @@ public class SavedRate
     public float Rate { get; set; }
 
     [MaxLength(100)]
-    public string Comment { get; set; }
+    public string? Comment { get; set; }
 
     public DateTime Created { get; set; } = DateTime.UtcNow;
 
-    public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
+    public DateTime? LastUpdated { get; set; } = DateTime.UtcNow;
 }

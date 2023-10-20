@@ -1,4 +1,4 @@
-namespace CurrencyExchange.Models;
+namespace CurrencyExchange.Application.Models;
 
 public class ExchangeRateWithComment
 {
@@ -9,3 +9,11 @@ public class ExchangeRateWithComment
     public float Value { get; set; }
     public string Comment { get; set; }
 }
+
+public record SaveRateViewModel(
+    int CurrencyId,
+    string CurrencyName,
+    float Rate,
+    string? Comment,
+    int ExchangeUnit,
+    DateTime Created);

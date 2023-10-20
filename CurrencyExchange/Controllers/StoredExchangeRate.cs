@@ -1,4 +1,6 @@
-using CurrencyExchange.Models;
+using CurrencyExchange.Application.Commands;
+using CurrencyExchange.Application.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyExchange.Controllers;
@@ -7,9 +9,18 @@ namespace CurrencyExchange.Controllers;
 [Route("[controller]")]
 public class StoredExchangeRate : ControllerBase
 {
-    [HttpPost]
-    public IActionResult Post([FromBody] ExchangeRateWithComment exchangeRateWithComment)
+    private IMediator _mediator;
+
+    public StoredExchangeRate(IMediator mediator)
     {
-        return Ok();
+        _mediator = mediator;
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> Post([FromBody] ExchangeRateWithComment exchangeRateWithComment)
+    {
+        var savedRate = await _mediator.Send(new StoreCurrencyRateCommand(exchangeRateWithComment));
+
+        return new JsonResult(savedRate);
     }
 }
