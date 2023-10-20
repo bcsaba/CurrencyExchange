@@ -12,6 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { FetchExchangeRateComponent } from "./fetch-exchange-rate/fetch-exchange-rate.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {ToastsContainer} from "./toasts-container/toasts-container.component";
+import { HufConverterComponent } from './huf-converter/huf-converter.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {ToastsContainer} from "./toasts-container/toasts-container.component";
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    FetchExchangeRateComponent
+    FetchExchangeRateComponent,
+    HufConverterComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -30,7 +32,7 @@ import {ToastsContainer} from "./toasts-container/toasts-container.component";
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'huf-converter', component: HufConverterComponent },
       { path: 'fetch-exchange-rate', component: FetchExchangeRateComponent },
     ]),
     ToastsContainer
