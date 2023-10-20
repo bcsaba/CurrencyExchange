@@ -38,7 +38,8 @@ public class StoreCurrencyRateHandler : IRequestHandler<StoreCurrencyRateCommand
             Currency = currency,
             Rate = exchangeRate.Value,
             Created = DateTime.UtcNow,
-            Comment = exchangeRate.Comment
+            Comment = exchangeRate.Comment,
+            RateDay = exchangeRate.ExchangeDate
         };
         await _dbContext.SavedRates.AddAsync(savedRate, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -48,6 +49,7 @@ public class StoreCurrencyRateHandler : IRequestHandler<StoreCurrencyRateCommand
             savedRate.Rate,
             savedRate.Comment,
             currency.Unit,
-            savedRate.Created);
+            savedRate.Created,
+            savedRate.RateDay);
     }
 }

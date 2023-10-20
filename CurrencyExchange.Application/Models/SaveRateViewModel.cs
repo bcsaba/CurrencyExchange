@@ -7,4 +7,4 @@ public record SaveRateViewModel(
     string? Comment,
     int ExchangeUnit,
     DateTime Created,
-    DateOnly RateDay)
+    DateOnly RateDay);
