@@ -28,6 +28,8 @@ public class GetStoredRatesQueryHandler : IRequestHandler<GetStoredRatesQuery, I
                 Value = x.Rate,
                 Comment = x.Comment ?? string.Empty
             })
+            .OrderBy(r => r.Currency)
+            .ThenByDescending(r => r.ExchangeDate)
             .ToListAsync(cancellationToken);
 
         return storedRates;
