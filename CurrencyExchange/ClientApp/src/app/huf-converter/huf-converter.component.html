@@ -1,18 +1,28 @@
 <h3>Exchange HUF to EUR</h3>
 
 <form name="hufConverterForm">
-  <div class="row mb-3">
-    <div class="col-1">
-      <label for="amount" class="form-label">Amount</label>
-    </div>
-    <div class="col-3">
-      <input id="amount"
-             type="number"
-             name="amount"
-             placeholder="Amount"
-             class="form-control"
-             [(ngModel)]="amount">
-      <button type="button" class="btn btn-primary" (click)="convert()">Convert</button>
+  <div class="container">
+    <div class="row">
+      <div class="col-2">
+        <label for="amount" class="form-label">Amount in HUF</label>
+      </div>
+      <div class="col-3">
+        <input id="amount"
+               type="number"
+               name="amount"
+               placeholder="Amount"
+               class="form-control"
+               [(ngModel)]="fromAmount">
+      </div>
+      <div class="col-1">
+        <button type="button" class="btn btn-primary" (click)="convert()">Convert</button>
+      </div>
+      <div class="col-2 d-flex justify-content-end">
+        <label class="form-label">Amount in EUR:</label>
+      </div>
+      <div class="col-1 d-flex justify-content-end">
+        <label class="form-label">{{toAmount}}</label>
+      </div>
     </div>
   </div>
 </form>
