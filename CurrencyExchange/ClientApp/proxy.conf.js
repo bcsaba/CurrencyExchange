@@ -9,6 +9,7 @@ const PROXY_CONFIG = [
       "/weatherforecast",
       "/mnbcurrentexchangerates",
       "/storedexchangerate",
+      "/currencyconversion"
    ],
     proxyTimeout: 10000,
     target: target,
