@@ -55,7 +55,7 @@ export class FetchExchangeRateComponent implements OnDestroy {
               console.error(err)
             },
             next: value => {
-              this.showSuccess('Exchange rate saved successfully');
+              this.showSuccess(`Exchange rate for ${value.currency} saved successfully`);
               console.log(value);
             }
           }
