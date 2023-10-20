@@ -15,6 +15,8 @@ public class SavedRate
     [MaxLength(100)]
     public string? Comment { get; set; }
 
+    [Required] public DateOnly RateDay { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1));
+
     public DateTime Created { get; set; } = DateTime.UtcNow;
 
     public DateTime? LastUpdated { get; set; } = DateTime.UtcNow;
