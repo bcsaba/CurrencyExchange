@@ -17,10 +17,11 @@ public class GetSavedRateByCurrencyAndDateRequestHandler : IRequestHandler<GetSa
 
     public async Task<SavedRate?> Handle(GetSavedRateByCurrencyAndDateRequest request, CancellationToken cancellationToken)
     {
-        return await _dbContext.SavedRates
+        var singleOrDefaultAsync = await _dbContext.SavedRates
             .Include(sr => sr.Currency)
             .SingleOrDefaultAsync(sr =>
                 sr.Currency.CurrencyName == request.currencyName
                 && sr.RateDay == request.date);
+        return singleOrDefaultAsync;
     }
 }

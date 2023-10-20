@@ -4,7 +4,6 @@ using CurrencyExchange.Application.Queries;
 using CurrencyExchange.Persistence;
 using CurrencyExchange.Persistence.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyExchange.Application.Handlers;
 

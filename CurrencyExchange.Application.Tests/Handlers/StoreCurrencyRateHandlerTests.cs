@@ -14,54 +14,28 @@ namespace CurrencyExchange.Application.Tests.Handlers;
 public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
 {
     private readonly IMediator _mediator;
-    private ExchangeRateDbContext _dbContext;
+    private TestExchangeRateDbContext _dbContext;
     private StoreCurrencyRateHandler _sut;
     private const string TestCurrencyName = "EUR";
-    private readonly DateOnly TestExchangeRateDate = new(2021, 1, 1);
+    private readonly DateOnly _testExchangeRateDate = new(2021, 1, 1);
 
     public StoreCurrencyRateHandlerTests()
     {
         _mediator = Substitute.For<IMediator>();
-        _mediator.Send(Arg.Any<GetLocalCurrencyByNameRequest>())
-            .Returns(new Currency
-            {
-                Id = 1,
-                CurrencyName = "EUR",
-                SavedRates = new List<SavedRate>()
-            });
-        _mediator.Send(new GetSavedRateByCurrencyAndDateRequest("EUR", TestExchangeRateDate))
-            .Returns(default(SavedRate));
 
+        _dbContext = GetCleanDbForTest();
+        _dbContext.Database.BeginTransaction();
 
-        // new SavedRate
-        // {
-        //     Id = 1,
-        //     Currency = new Currency
-        //     {
-        //         Id = 1,
-        //         CurrencyName = "EUR",
-        //         SavedRates = new List<SavedRate>()
-        //     },
-        //     Rate = 1.0m,
-        //     Created = DateTime.UtcNow,
-        //     Comment = "Test",
-        //     RateDay = DateTime.UtcNow
-        // }
-
-
+        _sut = new StoreCurrencyRateHandler(_dbContext, _mediator);
     }
 
     [Fact]
     private async Task WhenSaveRate_ThenCheckForCurrency()
     {
-        GetCleanDbForTest();
-
-        _sut = new StoreCurrencyRateHandler(_dbContext, _mediator);
-
         await _sut.Handle(new StoreCurrencyRateCommand(new ExchangeRateWithComment
         {
             Currency = TestCurrencyName,
-            ExchangeDate = TestExchangeRateDate,
+            ExchangeDate = _testExchangeRateDate,
             Value = 1.0f,
             Comment = "Test"
         }), CancellationToken.None);
@@ -74,12 +48,10 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
     {
         GetCleanDbForTest();
 
-        _sut = new StoreCurrencyRateHandler(_dbContext, _mediator);
-
         await _sut.Handle(new StoreCurrencyRateCommand(new ExchangeRateWithComment
         {
             Currency = TestCurrencyName,
-            ExchangeDate = TestExchangeRateDate,
+            ExchangeDate = _testExchangeRateDate,
             Value = 1.0f,
             Comment = "Test"
         }), CancellationToken.None);
@@ -89,30 +61,15 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
     }
 
     [Fact]
-    // [Fact(Skip = "Fails with currency can not be tracked message only in in-memory DB testing.")]
-    // This fails because the currency is not tracked by the context with in-memory DB testing.
-    // "The instance of entity type 'Currency' cannot be tracked because another instance with the key value '{Id: 1}' is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached."
-    // Works fine if _dbContext is used directly instead of _mediator call.
     private async Task GivenNeededCurrency_WhenSaveRate_ThenDoNotAddCurrencyAgain()
     {
-        GetCleanDbForTest();
-        _dbContext.Currencies.Count().Should().Be(0);
-
-        var currency = new Currency
-        {
-            CurrencyName = TestCurrencyName
-        };
-        await _dbContext.Currencies.AddAsync(currency);
-        await _dbContext.SaveChangesAsync();
-        _dbContext.Currencies.Entry(currency).State = EntityState.;
-        _dbContext.Currencies.Count().Should().Be(1);
-
-        _sut = new StoreCurrencyRateHandler(_dbContext, _mediator);
+        var currency = new Currency { CurrencyName = TestCurrencyName };
+        await SetupInitialData(currency, null);
 
         await _sut.Handle(new StoreCurrencyRateCommand(new ExchangeRateWithComment
         {
             Currency = TestCurrencyName,
-            ExchangeDate = TestExchangeRateDate,
+            ExchangeDate = _testExchangeRateDate,
             Value = 1.0f,
             Comment = "Test"
         }), CancellationToken.None);
@@ -121,26 +78,81 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
         _dbContext.Currencies.FirstAsync().Result.CurrencyName.Should().Be(TestCurrencyName);
     }
 
-    private void GetCleanDbForTest()
+    [Fact]
+    private async Task GivenNoSavedRate_WhenSaveRate_ThenRateSaved()
     {
-        var options = new DbContextOptionsBuilder<ExchangeRateDbContext>()
-            .UseInMemoryDatabase("TestDb")
-            .EnableSensitiveDataLogging(true)
-            .Options;
+        await _sut.Handle(new StoreCurrencyRateCommand(new ExchangeRateWithComment
+        {
+            Currency = TestCurrencyName,
+            ExchangeDate = _testExchangeRateDate,
+            Value = 1.0f,
+            Comment = "Test"
+        }), CancellationToken.None);
 
-        _dbContext = new ExchangeRateDbContext(options);
-        _dbContext.Currencies.RemoveRange(_dbContext.Currencies);
-        _dbContext.SavedRates.RemoveRange(_dbContext.SavedRates);
-        _dbContext.SaveChanges();
+        _dbContext.SavedRates.Count().Should().Be(1);
+    }
+
+    [Fact]
+    private async Task GivenExistingSavedRate_WhenSaveRate_ThenNewSavedRateNotAdded()
+    {
+        var currency = new Currency { CurrencyName = TestCurrencyName };
+        var savedRate = new SavedRate
+        {
+            Currency = currency,
+            RateDay = _testExchangeRateDate,
+            Comment = "Test comment",
+            Rate = 123.5f
+        };
+        await SetupInitialData(currency, savedRate);
+
+        await _sut.Handle(new StoreCurrencyRateCommand(new ExchangeRateWithComment
+        {
+            Currency = TestCurrencyName,
+            ExchangeDate = _testExchangeRateDate,
+            Value = 1.0f,
+            Comment = "Test"
+        }), CancellationToken.None);
+
+        _dbContext.SavedRates.Count().Should().Be(1);
     }
 
     public void Dispose()
     {
+        var a = _dbContext.Currencies.ToList();
+        _dbContext.Database.RollbackTransaction();
         _dbContext.Dispose();
     }
 
     public async ValueTask DisposeAsync()
     {
+        await _dbContext.Database.RollbackTransactionAsync();
         await _dbContext.DisposeAsync();
+    }
+
+    private async Task SetupInitialData(Currency currency, SavedRate? savedRate)
+    {
+        await _dbContext.Currencies.AddAsync(currency);
+        if (savedRate != null)
+        {
+            await _dbContext.SavedRates.AddAsync(savedRate);
+        }
+        await _dbContext.SaveChangesAsync();
+        _mediator.Send(Arg.Any<GetLocalCurrencyByNameRequest>())
+            .Returns(currency);
+        _mediator.Send(Arg.Any<GetSavedRateByCurrencyAndDateRequest>())
+            .Returns(savedRate);
+    }
+
+    private TestExchangeRateDbContext GetCleanDbForTest()
+    {
+        var options = new DbContextOptionsBuilder<ExchangeRateDbContext>()
+            .UseNpgsql("Host=127.0.0.1;Port=5432;Database=test_exchange_rates_development;Username=exchangerate;Password=exchangerate;Timeout=30")
+            .Options;
+
+        var dbContext = new TestExchangeRateDbContext(options);
+        dbContext.Currencies.RemoveRange(dbContext.Currencies);
+        dbContext.SavedRates.RemoveRange(dbContext.SavedRates);
+        dbContext.SaveChanges();
+        return dbContext;
     }
 }
