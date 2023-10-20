@@ -21,7 +21,7 @@ export class FetchExchangeRateComponent implements OnDestroy {
   constructor(
     private modalService: NgbModal,
     private exchangeRatesService: ExchangeRatesService,
-    public toastService: ToastService
+    private toastService: ToastService
   ) {
     this.exchangeRatesService.getCurrentMnbRates()
       .subscribe(

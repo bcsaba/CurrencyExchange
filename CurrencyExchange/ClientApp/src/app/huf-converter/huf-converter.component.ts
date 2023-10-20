@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, TemplateRef} from '@angular/core';
 import {CurrencyConversionModel, ExchangeRatesService} from "../exchange-rates.service";
+import {ToastService} from "../toast.service";
 
 @Component({
   selector: 'app-huf-converter',
@@ -12,6 +13,7 @@ export class HufConverterComponent {
 
   constructor(
     private exchangeRateService: ExchangeRatesService,
+    public toastService: ToastService
   ) {
   }
 
@@ -25,10 +27,11 @@ export class HufConverterComponent {
       .subscribe(
         {
           complete: () => console.log('HUF conversion completed'),
-          error: err => console.error(err),
+          error: err => {
+            this.toastService.show('Conversion failed! Try again, please!', { classname: 'bg-danger text-light', delay: 15000 });
+            },
           next: value => {
             this.toAmount = value.toAmount;
-            console.log(value);
           }
         }
       );
