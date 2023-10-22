@@ -1,11 +1,22 @@
 using CurrencyExchange.Application.mnb;
 using CurrencyExchange.Application.Queries;
 using CurrencyExchange.Persistence;
+using CurrencyExchange.Persistence.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ExchangeRateDbContext>();
+
+// builder.Services.AddIdentityServer()
+//     .AddApiAuthorization<ApplicationUser, ExchangeRateDbContext>();
+
+builder.Services.AddAuthentication()
+    .AddIdentityServerJwt();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IMnbExchangeRateService, MnbExchangeRateService>();
