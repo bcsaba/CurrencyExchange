@@ -2,10 +2,12 @@ using CurrencyExchange.Application.Commands;
 using CurrencyExchange.Application.Models;
 using CurrencyExchange.Application.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyExchange.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class StoredExchangeRateController : ControllerBase

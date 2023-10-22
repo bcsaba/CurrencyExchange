@@ -4,9 +4,11 @@ using CurrencyExchange.Application.Models;
 using CurrencyExchange.Application.Queries;
 using CurrencyExchange.Persistence;
 using CurrencyExchange.Persistence.Models;
+using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 
 namespace CurrencyExchange.Application.Tests.Handlers;
@@ -149,7 +151,8 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
             .UseNpgsql("Host=127.0.0.1;Port=5432;Database=test_exchange_rates_development;Username=exchangerate;Password=exchangerate;Timeout=30")
             .Options;
 
-        var dbContext = new TestExchangeRateDbContext(options);
+        var dbContext = new TestExchangeRateDbContext(options,
+            new OptionsWrapper<OperationalStoreOptions>(new OperationalStoreOptions()));
         dbContext.Currencies.RemoveRange(dbContext.Currencies);
         dbContext.SavedRates.RemoveRange(dbContext.SavedRates);
         dbContext.SaveChanges();
