@@ -7,6 +7,13 @@ const PROXY_CONFIG = [
   {
     context: [
       "/weatherforecast",
+      "/_configuration",
+      "/.well-known",
+      "/Identity",
+      "/connect",
+      "/ApplyDatabaseMigrations",
+      "/_framework",
+
       "/mnbcurrentexchangerates",
       "/storedexchangerate",
       "/currencyconversion"
