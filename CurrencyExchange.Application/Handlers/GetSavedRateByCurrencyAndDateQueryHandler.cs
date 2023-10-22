@@ -20,8 +20,10 @@ public class GetSavedRateByCurrencyAndDateQueryHandler : IRequestHandler<GetSave
         var singleOrDefaultAsync = await _dbContext.SavedRates
             .Include(sr => sr.Currency)
             .SingleOrDefaultAsync(sr =>
-                sr.Currency.CurrencyName == query.currencyName
-                && sr.RateDay == query.date);
+                sr.CreatedBy == query.applicationUser
+                && sr.Currency.CurrencyName == query.currencyName
+                && sr.RateDay == query.date, cancellationToken);
         return singleOrDefaultAsync;
     }
 }
+

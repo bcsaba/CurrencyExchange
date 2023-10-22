@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyExchange.Application.Handlers;
 
-public class GetLocalCurrencyByIdQueryHandler : IRequestHandler<GetLocalCurrencyByIdQuery, Currency>
+public class GetLocalCurrencyByIdQueryHandler : IRequestHandler<GetLocalCurrencyByIdQuery, Currency?>
 {
     private readonly ExchangeRateDbContext _dbContext;
 
@@ -15,8 +15,13 @@ public class GetLocalCurrencyByIdQueryHandler : IRequestHandler<GetLocalCurrency
         _dbContext = dbContext;
     }
 
-    public async Task<Currency> Handle(GetLocalCurrencyByIdQuery query, CancellationToken cancellationToken)
+    public async Task<Currency?> Handle(GetLocalCurrencyByIdQuery query, CancellationToken cancellationToken)
     {
-        return await _dbContext.Currencies.SingleOrDefaultAsync(c => c.Id == query.Id);
+        return await _dbContext.Currencies
+            .SingleOrDefaultAsync(
+                c =>
+                    c.CreatedBy == query.applicationUser
+                    && c.Id == query.Id,
+                cancellationToken);
     }
 }

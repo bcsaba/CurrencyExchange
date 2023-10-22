@@ -3,4 +3,4 @@ using MediatR;
 
 namespace CurrencyExchange.Application.Queries;
 
-public record GetLocalCurrencyByIdQuery(ApplicationUser applicationUser, int Id) : IRequest<Currency?> { };
+public record GetUserByIdQuery(string userId) : IRequest<ApplicationUser>;
