@@ -5,3 +5,8 @@
 .striped-row:nth-child(even) {
   background-color: #ffffff;
 }
+
+.ce-table{
+  width: 60%;
+  border-collapse: collapse;
+}
