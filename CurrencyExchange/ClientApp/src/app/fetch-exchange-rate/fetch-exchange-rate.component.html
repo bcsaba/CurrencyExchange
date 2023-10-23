@@ -12,13 +12,13 @@
 <div *ngIf="exchangeRates != undefined">
   <h3 class="d-flex justify-content-center p-3">Exchange rates for {{ exchangeRates.day.exchangeDate | date:"yyyy.MM.dd." }}</h3>
 
-  <div class="container">
+  <div class="container ce-table">
 
     <div class="row fw-bolder border-bottom p-2">
-      <div class="col">
+      <div class="col-1 d-flex justify-content-center">
         Currency
       </div>
-      <div class="col">
+      <div class="col d-flex justify-content-center">
         Unit
       </div>
       <div class="col d-flex justify-content-end">
@@ -30,16 +30,16 @@
     </div>
 
     <div class="row p-1 striped-row" *ngFor="let exchangeRate of exchangeRates?.day?.rates">
-      <div class="col">
+      <div class="col-1 d-flex justify-content-center">
         {{ exchangeRate.currency }}
       </div>
-      <div class="col">
+      <div class="col d-flex justify-content-center">
         {{ exchangeRate.exchangeUnit }}
       </div>
       <div class="col d-flex justify-content-end">
         {{ exchangeRate.value | number:'1.2-2' }}
       </div>
-      <div class="col d-flex justify-content-end">
+      <div class="col d-flex justify-content-end pe-0">
         <button type="button" class="btn btn-primary" (click)="open(content, exchangeRate)">🖫</button>
       </div>
     </div>
