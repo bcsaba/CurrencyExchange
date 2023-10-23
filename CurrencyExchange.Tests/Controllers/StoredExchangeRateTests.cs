@@ -1,8 +1,11 @@
+using System.Security.Claims;
 using CurrencyExchange.Application.Models;
 using CurrencyExchange.Application.Queries;
 using CurrencyExchange.Controllers;
 using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 
 namespace CurrencyExchange.Tests.Controllers;
@@ -17,7 +20,19 @@ public class StoredExchangeRateTests
         _mediator = Substitute.For<IMediator>();
         _mediator.Send(Arg.Any<object>())
             .Returns(new object());
+
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.Name, "Test"),
+            new Claim(ClaimTypes.NameIdentifier, "1"),
+            new Claim("custom-claim", "Test claim value"),
+        }, "test"));
+
         _storedExchangeRateController = new StoredExchangeRateController(_mediator);
+        _storedExchangeRateController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
     }
 
     [Fact]
