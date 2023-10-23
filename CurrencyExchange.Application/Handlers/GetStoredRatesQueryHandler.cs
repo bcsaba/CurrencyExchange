@@ -18,6 +18,7 @@ public class GetStoredRatesQueryHandler : IRequestHandler<GetStoredRatesQuery, I
     public async Task<IEnumerable<ExchangeRateWithComment>> Handle(GetStoredRatesQuery request, CancellationToken cancellationToken)
     {
         var storedRates = await _exchangeRateDbContext.SavedRates
+            .Where(x => x.CreatedBy.Id == request.UserId)
             .Include(x => x.Currency)
             .Select(x => new ExchangeRateWithComment
             {

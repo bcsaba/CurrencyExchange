@@ -1,7 +1,19 @@
+<div class="container">
+  <ngx-spinner
+  size="medium"
+  color="#fff"
+  type="ball-spin-clockwise"
+  [fullScreen]="false">
+  <p style="color: white" > Loading... </p>
+  </ngx-spinner>
+</div>
+
+
 <div *ngIf="exchangeRates != undefined">
   <h3 class="d-flex justify-content-center p-3">Exchange rates for {{ exchangeRates.day.exchangeDate | date:"yyyy.MM.dd." }}</h3>
 
   <div class="container">
+
     <div class="row fw-bolder border-bottom p-2">
       <div class="col">
         Currency

@@ -1,6 +1,27 @@
+<div class="container">
+  <ngx-spinner
+    size="medium"
+    color="#fff"
+    type="ball-spin-clockwise"
+    [fullScreen]="false">
+    <p style="color: white" > Loading... </p>
+  </ngx-spinner>
+</div>
+
 <h3 class="d-flex justify-content-center p-3">Stored rates administration</h3>
 
-<div class="container">
+<ng-container *ngIf="storedRates.length === 0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <p class="text-center">No stored rates found.</p>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<div class="container" *ngIf="storedRates.length > 0">
   <div class="row fw-bolder border-bottom p-2">
     <div class="col-1">
       Currency

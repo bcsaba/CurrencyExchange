@@ -1,14 +1,15 @@
-import {Component, OnDestroy, TemplateRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ExchangeRates, ExchangeRatesService, Rate, RateWithComment} from "../exchange-rates.service";
 import {ToastService} from "../toast.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-fetch-exchange-rate',
   templateUrl: './fetch-exchange-rate.component.html',
   styleUrls: ['./fetch-exchange-rate.component.css']
 })
-export class FetchExchangeRateComponent implements OnDestroy {
+export class FetchExchangeRateComponent implements OnInit, OnDestroy {
   public exchangeRates: ExchangeRates | undefined;
   public activeRate: RateWithComment = {
     exchangeDate: new Date(),
@@ -21,20 +22,35 @@ export class FetchExchangeRateComponent implements OnDestroy {
   constructor(
     private modalService: NgbModal,
     private exchangeRatesService: ExchangeRatesService,
-    private toastService: ToastService
-  ) {
-    this.exchangeRatesService.getCurrentMnbRates()
-      .subscribe(
-        {
-          complete: () => console.log('Get MNB rates completed'),
-          error: err => console.error(err),
-          next: value => {
-            // this.showSuccess('MNB rates loaded');
-            this.exchangeRates = value;
-            console.log(value);
-          }
-        },
-      );
+    private toastService: ToastService,
+    private spinnerService: NgxSpinnerService
+  ) { }
+
+  ngOnInit(): void {
+    this.spinnerService.show()
+      .then(r => {
+        console.log('Loading MNB rates...');
+        this.exchangeRatesService.getCurrentMnbRates()
+          .subscribe(
+            {
+              complete: () => {
+                console.log('Get MNB rates completed');
+              },
+              error: err => {
+                this.showDanger('There was an error loading data! Try again!');
+                this.spinnerService.hide();
+                console.error(err);
+              },
+              next: value => {
+                this.showSuccess('MNB rates loaded');
+                this.exchangeRates = value;
+                this.spinnerService.hide();
+                console.log(value);
+              }
+            },
+          );
+      }
+    );
   }
 
   open(content: any, selectedRate: Rate) {

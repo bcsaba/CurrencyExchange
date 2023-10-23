@@ -6,6 +6,7 @@ using MediatR;
 using www.mnb.hu.webservices;
 using www.mnb.hu.webservices.Models;
 
+
 namespace CurrencyExchange.Application.Handlers;
 
 public class ConvertCurrencyQueryHandler : IRequestHandler<ConvertCurrencyQuery, CurrencyConversionModel>

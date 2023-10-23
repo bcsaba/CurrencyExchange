@@ -23,7 +23,9 @@ public class StoredExchangeRateController : ControllerBase
     [HttpGet]
     public async Task<JsonResult> Get()
     {
-        var storedRates = await _mediator.Send(new GetStoredRatesQuery());
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+
+        var storedRates = await _mediator.Send(new GetStoredRatesQuery(userId));
         return new JsonResult(storedRates);
     }
 
