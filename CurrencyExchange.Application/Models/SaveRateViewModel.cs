@@ -1,6 +1,7 @@
 namespace CurrencyExchange.Application.Models;
 
 public record SaveRateViewModel(
+    int Id,
     int CurrencyId,
     string Currency,
     float Value,

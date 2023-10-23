@@ -12,6 +12,8 @@ public class Currency
     [Required]
     public int Unit { get; set; }
 
+    public ApplicationUser CreatedBy { get; set; }
+
     [Required]
     public DateTime Created { get; set; } = DateTime.UtcNow;
 

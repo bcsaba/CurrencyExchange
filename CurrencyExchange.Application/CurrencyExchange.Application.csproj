@@ -18,4 +18,10 @@
     <ProjectReference Include="..\CurrencyExchange.Persistence\CurrencyExchange.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer">
+      <HintPath>..\..\..\.nuget\packages\microsoft.aspnetcore.apiauthorization.identityserver\7.0.12\lib\net7.0\Microsoft.AspNetCore.ApiAuthorization.IdentityServer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

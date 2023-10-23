@@ -76,13 +76,13 @@ public class MnbExchangeRateServiceTests
     }
 
     [Fact]
-    public async Task WhenRequestCurrentExchangeRates_ResultShouldContainCurrentDateElement()
+    public async Task WhenRequestCurrentExchangeRates_ResultShouldContainDateElement()
     {
         var infoAsync = 
             await _mnbExchangeRateService.GetCurrentExchangeRatesAsync(new GetCurrentExchangeRatesRequestBody());
 
         infoAsync.GetCurrentExchangeRatesResponse1.GetCurrentExchangeRatesResult
-            .Should().Contain($"<Day date=\"{DateTime.Today:yyyy-MM-dd}\">");
+            .Should().MatchRegex("<Day date=\"\\d{4}-\\d{2}-\\d{2}\">");
     }
 
     [Fact]

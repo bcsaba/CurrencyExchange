@@ -3,4 +3,4 @@ using MediatR;
 
 namespace CurrencyExchange.Application.Commands;
 
-public record StoreCurrencyRateCommand(ExchangeRateWithComment exchangeRate) : IRequest<SaveRateViewModel>;
+public record StoreCurrencyRateCommand(ExchangeRateWithComment exchangeRate, string userId) : IRequest<SaveRateViewModel>;

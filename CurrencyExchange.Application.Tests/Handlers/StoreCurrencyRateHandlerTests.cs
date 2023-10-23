@@ -4,9 +4,11 @@ using CurrencyExchange.Application.Models;
 using CurrencyExchange.Application.Queries;
 using CurrencyExchange.Persistence;
 using CurrencyExchange.Persistence.Models;
+using Duende.IdentityServer.EntityFramework.Options;
 using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 
 namespace CurrencyExchange.Application.Tests.Handlers;
@@ -17,6 +19,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
     private TestExchangeRateDbContext _dbContext;
     private StoreCurrencyRateCommandHandler _sut;
     private const string TestCurrencyName = "EUR";
+    private ApplicationUser _testUser;
     private readonly DateOnly _testExchangeRateDate = new(2021, 1, 1);
 
     public StoreCurrencyRateHandlerTests()
@@ -26,6 +29,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
         _dbContext = GetCleanDbForTest();
         _dbContext.Database.BeginTransaction();
 
+        SetupUsersForTests();
         _sut = new StoreCurrencyRateCommandHandler(_dbContext, _mediator);
     }
 
@@ -38,7 +42,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
             ExchangeDate = _testExchangeRateDate,
             Value = 1.0f,
             Comment = "Test"
-        }), CancellationToken.None);
+        }, _testUser.Id), CancellationToken.None);
 
         await _mediator.Received(1).Send(Arg.Any<GetLocalCurrencyByNameQuery>());
     }
@@ -54,7 +58,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
             ExchangeDate = _testExchangeRateDate,
             Value = 1.0f,
             Comment = "Test"
-        }), CancellationToken.None);
+        }, _testUser.Id), CancellationToken.None);
 
         _dbContext.Currencies.Count().Should().Be(1);
         _dbContext.Currencies.FirstAsync().Result.CurrencyName.Should().Be(TestCurrencyName);
@@ -72,7 +76,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
             ExchangeDate = _testExchangeRateDate,
             Value = 1.0f,
             Comment = "Test"
-        }), CancellationToken.None);
+        }, _testUser.Id), CancellationToken.None);
 
         _dbContext.Currencies.Count().Should().Be(1);
         _dbContext.Currencies.FirstAsync().Result.CurrencyName.Should().Be(TestCurrencyName);
@@ -87,7 +91,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
             ExchangeDate = _testExchangeRateDate,
             Value = 1.0f,
             Comment = "Test"
-        }), CancellationToken.None);
+        }, _testUser.Id), CancellationToken.None);
 
         _dbContext.SavedRates.Count().Should().Be(1);
     }
@@ -111,7 +115,7 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
             ExchangeDate = _testExchangeRateDate,
             Value = 1.0f,
             Comment = "Test"
-        }), CancellationToken.None);
+        }, _testUser.Id), CancellationToken.None);
 
         _dbContext.SavedRates.Count().Should().Be(1);
     }
@@ -131,12 +135,17 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
 
     private async Task SetupInitialData(Currency currency, SavedRate? savedRate)
     {
+        var createdBy = _dbContext.ApplicationUsers.First();
+        currency.CreatedBy = createdBy;
+
         await _dbContext.Currencies.AddAsync(currency);
         if (savedRate != null)
         {
+            savedRate.CreatedBy = createdBy;
             await _dbContext.SavedRates.AddAsync(savedRate);
         }
         await _dbContext.SaveChangesAsync();
+
         _mediator.Send(Arg.Any<GetLocalCurrencyByNameQuery>())
             .Returns(currency);
         _mediator.Send(Arg.Any<GetSavedRateByCurrencyAndDateQuery>())
@@ -149,10 +158,19 @@ public class StoreCurrencyRateHandlerTests : IDisposable, IAsyncDisposable
             .UseNpgsql("Host=127.0.0.1;Port=5432;Database=test_exchange_rates_development;Username=exchangerate;Password=exchangerate;Timeout=30")
             .Options;
 
-        var dbContext = new TestExchangeRateDbContext(options);
+        var dbContext = new TestExchangeRateDbContext(options,
+            new OptionsWrapper<OperationalStoreOptions>(new OperationalStoreOptions()));
         dbContext.Currencies.RemoveRange(dbContext.Currencies);
         dbContext.SavedRates.RemoveRange(dbContext.SavedRates);
         dbContext.SaveChanges();
         return dbContext;
+    }
+
+    private void SetupUsersForTests()
+    {
+        _dbContext.ApplicationUsers.Add(new ApplicationUser { Email = "test@test.com" });
+        _dbContext.SaveChanges();
+        _testUser = _dbContext.ApplicationUsers.First();
+        _mediator.Send(Arg.Any<GetUserByIdQuery>()).Returns(_testUser);
     }
 }
