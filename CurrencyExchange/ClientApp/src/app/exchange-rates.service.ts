@@ -12,8 +12,8 @@ export class ExchangeRatesService {
     @Inject('BASE_URL') public baseUrl: string) { }
 
   getCurrentMnbRates() : Observable<ExchangeRates> {
-    return this.http.get<ExchangeRates>(this.baseUrl + 'mnbcurrentexchangerates')
-      .pipe(catchError(this.handleError<ExchangeRates>('getCurrentMnbRates', undefined)));
+    return this.http.get<ExchangeRates>(this.baseUrl + 'mnbcurrentexchangerates');
+      // .pipe(catchError(this.handleError<ExchangeRates>('getCurrentMnbRates', undefined)));
   }
 
   saveRateWithComment(rateWithComment: RateWithComment) : Observable<RateWithComment> {

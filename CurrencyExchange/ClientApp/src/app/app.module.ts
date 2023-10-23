@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -10,13 +10,15 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { FetchExchangeRateComponent } from "./fetch-exchange-rate/fetch-exchange-rate.component";
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {ToastsContainer} from "./toasts-container/toasts-container.component";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { ToastsContainer } from "./toasts-container/toasts-container.component";
 import { HufConverterComponent } from './huf-converter/huf-converter.component';
 import { StoredRatesAdminComponent } from './stored-rates-admin/stored-rates-admin.component';
 import { ApiAuthorizationModule } from "../api-authorization/api-authorization.module";
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
         HttpClientModule,
         FormsModule,
         NgbModule,
+        BrowserAnimationsModule,
+        NgxSpinnerModule,
         ApiAuthorizationModule,
         RouterModule.forRoot([
             {path: '', component: HomeComponent, pathMatch: 'full'},
@@ -44,6 +48,7 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
         ]),
         ToastsContainer
     ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
   ],
