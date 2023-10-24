@@ -13,9 +13,12 @@ At the current state it provides the below functionalities:
 
 - .Net 7, C#
 - EF Core v7.0
+- Npgsql v7.0
 - PostgreSQL
+- MediatR
+- NSubstitute, Fluent validation
 - Angular v15.2
-- Bootstrap 5.2.3
+- Bootstrap 5.2
 
 The live database should be generated through code-first migrations (`ExchangeRateDbContext` context). A separate test database for the tests can be generated through the `TestExchangeRateDbContext` DB context. This is needed to successfully run the tests on the backend.
 
@@ -71,4 +74,10 @@ Following is a list of improvement possibilities for the current version of the 
     - HUF => EUR conversion pages: This maybe does not even require a login, since there is no saved data used here. Just the openly available MNB information.
 	- The MNB Exchange rates page: The initial load here also only uses public data. For the save of a comment we need to login the user. Which is kind of a break of a workflow a bit to navigate away for authetnication. Probably the previous one is a better option for a starting page.
 
+- Security
+  * The connection strings and other similar sensitive information should be encrypted, potentially used through a key management service when deployed live. These parts should be updated for security reasons.
+
+- General code improvements:
+  * Naming improvements. Some naming picked up initially turned out to be not the best option. These should be fixed and consolidated. (e.g. `RateDay` vs `ExchangeDate`)
+  * To have a quick solution up and running DB classes was used at some places even in the upper layers, projects. Those should be eliminated and better DTOs, model classes created and mapped between each other to eliminate unnecessary dependencies and to provide better separation of concerns handling.
 
